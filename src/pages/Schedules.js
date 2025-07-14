@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthProvider";
 
 export default function Schedules() {
+  const { user } = useAuth();
+
   const now = new Date();
 
   const [ schedules, setSchedules ] = useState( [] );
@@ -20,25 +23,25 @@ export default function Schedules() {
       const [ schedulesRes, lecturersRes, classroomsRes, coursesRes ] = await Promise.all( [
         axios.get( "http://localhost:9090/api/v1/admin/schedules", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/lecturers", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/classrooms", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/courses", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } )
@@ -75,14 +78,14 @@ export default function Schedules() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/schedules/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/schedules", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
@@ -108,7 +111,7 @@ export default function Schedules() {
     try {
       await axios.delete( `http://localhost:9090/api/v1/admin/schedules/${id}`, {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );

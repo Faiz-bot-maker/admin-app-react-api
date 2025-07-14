@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../components/AuthProvider";
 
 export default function Grades() {
+  const { user } = useAuth();
+
   const [ grades, setGrades ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
   const [ error, setError ] = useState( null );
@@ -14,7 +17,7 @@ export default function Grades() {
     try {
       const res = await axios.get( "http://localhost:9090/api/v1/admin/grade-components", {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );
@@ -40,14 +43,14 @@ export default function Grades() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/grade-components/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/grade-components", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );

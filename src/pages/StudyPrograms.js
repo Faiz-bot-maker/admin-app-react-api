@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../components/AuthProvider";
 
 export default function StudyPrograms() {
+  const { user } = useAuth();
   const [ studyPrograms, setStudyPrograms ] = useState( [] );
   const [ faculties, setFaculties ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
@@ -16,13 +18,13 @@ export default function StudyPrograms() {
       const [ programsRes, facultiesRes ] = await Promise.all( [
         axios.get( "http://localhost:9090/api/v1/admin/study-programs", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/faculties", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } )
@@ -56,14 +58,14 @@ export default function StudyPrograms() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/study-programs/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/study-programs", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
@@ -89,7 +91,7 @@ export default function StudyPrograms() {
     try {
       await axios.delete( `http://localhost:9090/api/v1/admin/study-programs/${id}`, {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );

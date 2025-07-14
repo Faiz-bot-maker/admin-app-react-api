@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../components/AuthProvider";
 
 export default function Courses() {
+  const { user } = useAuth();
+
   const [ courses, setCourses ] = useState( [] );
   const [ lecturers, setLecturers ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
@@ -16,13 +19,13 @@ export default function Courses() {
       const [ coursesRes, lecturerRes ] = await Promise.all( [
         axios.get( "http://localhost:9090/api/v1/admin/courses", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/lecturers", {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } ),
@@ -58,14 +61,14 @@ export default function Courses() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/courses/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/courses", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
@@ -91,7 +94,7 @@ export default function Courses() {
     try {
       await axios.delete( `http://localhost:9090/api/v1/admin/courses/${id}`, {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../components/AuthProvider";
+
 
 export default function Faculties() {
+  const { user } = useAuth();
+
   const [ faculties, setFaculties ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
   const [ error, setError ] = useState( null );
@@ -10,11 +14,14 @@ export default function Faculties() {
   const [ editId, setEditId ] = useState( null );
 
   const fetchFaculties = async () => {
+    console.log( user );
+
+
     setLoading( true );
     try {
       const res = await axios.get( "http://localhost:9090/api/v1/admin/faculties", {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );
@@ -40,14 +47,14 @@ export default function Faculties() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/faculties/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/faculties", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
@@ -73,7 +80,7 @@ export default function Faculties() {
     try {
       await axios.delete( `http://localhost:9090/api/v1/admin/faculties/${id}`, {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );

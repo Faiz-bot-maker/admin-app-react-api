@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../components/AuthProvider";
 
 export default function Students() {
+  const { user } = useAuth();
+
   const [ students, setStudents ] = useState( [] );
   const [ studyPrograms, setStudyPrograms ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
@@ -29,13 +32,13 @@ export default function Students() {
       const [ studentsRes, studyProgramsRes ] = await Promise.all( [
         axios.get( "http://localhost:9090/api/v1/admin/students", {
           headers: {
-            Authorization: "e7c731d3-811c-4ab8-a4d9-5a62623b57bb",
+            Authorization: user.token,
             "Content-Type": "application/json",
           },
         } ),
         axios.get( "http://localhost:9090/api/v1/admin/study-programs", {
           headers: {
-            Authorization: "e7c731d3-811c-4ab8-a4d9-5a62623b57bb",
+            Authorization: user.token,
             "Content-Type": "application/json",
           },
         } ),
@@ -85,7 +88,7 @@ export default function Students() {
           formattedForm,
           {
             headers: {
-              Authorization: "e7c731d3-811c-4ab8-a4d9-5a62623b57bb",
+              Authorization: user.token,
               "Content-Type": "application/json",
             },
           }
@@ -96,7 +99,7 @@ export default function Students() {
           formattedForm,
           {
             headers: {
-              Authorization: "e7c731d3-811c-4ab8-a4d9-5a62623b57bb",
+              Authorization: user.token,
               "Content-Type": "application/json",
             },
           }
@@ -152,7 +155,7 @@ export default function Students() {
         `http://localhost:9090/api/v1/admin/students/${id}`,
         {
           headers: {
-            Authorization: "e7c731d3-811c-4ab8-a4d9-5a62623b57bb",
+            Authorization: user.token,
             "Content-Type": "application/json",
           },
         }

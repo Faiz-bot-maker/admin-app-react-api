@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import axios from "axios";
 
 export default function Header() {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [ isProfileOpen, setIsProfileOpen ] = useState( false );
   const navigate = useNavigate();
   const { logout, user } = useAuth();
 
   // Handle logout
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await axios.post( "http://localhost:9090/logout", null, {
+      headers: {
+        'Authorization': user.token,
+        'Content-Type': 'application/json'
+      }
+    } );
+
+
     logout();
-    navigate("/login");
+    navigate( "/login" );
   };
 
   return (
@@ -31,9 +40,9 @@ export default function Header() {
             </div> */}
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-4">
-          {/* Search Bar */}
+          {/* Search Bar */ }
           <div className="relative">
             <input
               type="text"
@@ -49,56 +58,56 @@ export default function Header() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={ 2 }
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
           </div>
 
-          {/* Notifications */}
+          {/* Notifications */ }
           <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200 hover:bg-gray-100 rounded-lg">
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M15 17h5l-5 5v-5z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
             <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>
           </button>
 
-          {/* Profile Dropdown */}
+          {/* Profile Dropdown */ }
           <div className="relative">
             <button
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              onClick={ () => setIsProfileOpen( !isProfileOpen ) }
               className="flex items-center space-x-2 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 p-2 hover:bg-gray-50 transition-all duration-200"
             >
-              {/* Avatar dengan inisial username */}
+              {/* Avatar dengan inisial username */ }
               <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center shadow-sm">
                 <span className="text-white font-medium">
-                  {user?.username?.charAt(0).toUpperCase() || 'A'}
+                  { user?.username?.charAt( 0 ).toUpperCase() || 'A' }
                 </span>
               </div>
-              {/* Username dari data user */}
+              {/* Username dari data user */ }
               <span className="text-gray-700 font-medium">
-                {user?.username || 'Admin'}
+                { user?.username || 'Admin' }
               </span>
               <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 } d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
-            {/* Dropdown menu */}
-            {isProfileOpen && (
+            {/* Dropdown menu */ }
+            { isProfileOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">Profile</a>
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">Settings</a>
                 <hr className="my-1 border-gray-200" />
                 <button
-                  onClick={handleLogout}
+                  onClick={ handleLogout }
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                 >
                   Logout
                 </button>
               </div>
-            )}
+            ) }
           </div>
         </div>
       </div>

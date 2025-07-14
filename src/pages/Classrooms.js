@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { useAuth } from "../components/AuthProvider";
 
 export default function Classrooms() {
+  const { user } = useAuth();
   const [ classrooms, setClassrooms ] = useState( [] );
   const [ loading, setLoading ] = useState( true );
   const [ error, setError ] = useState( null );
@@ -15,7 +16,7 @@ export default function Classrooms() {
     try {
       const res = await axios.get( "http://localhost:9090/api/v1/admin/classrooms", {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );
@@ -46,14 +47,14 @@ export default function Classrooms() {
       if ( editId ) {
         await axios.put( `http://localhost:9090/api/v1/admin/classrooms/${editId}`, form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
       } else {
         await axios.post( "http://localhost:9090/api/v1/admin/classrooms", form, {
           headers: {
-            'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+            'Authorization': user.token,
             'Content-Type': 'application/json'
           }
         } );
@@ -79,7 +80,7 @@ export default function Classrooms() {
     try {
       await axios.delete( `http://localhost:9090/api/v1/admin/classrooms/${id}`, {
         headers: {
-          'Authorization': 'e7c731d3-811c-4ab8-a4d9-5a62623b57bb',
+          'Authorization': user.token,
           'Content-Type': 'application/json'
         }
       } );
